@@ -52,7 +52,7 @@
       
       <?php if($this->contactEmail): ?>
         <div class="contact__email">
-          <a href="<?= $this->contactEmailLink ?>" title="<?= $this->contactName ?>">E-Mail</a>
+          <a href="<?= $this->contactEmailLink ?>" title="<?= $this->contactName ?>"><?= $this->contactEmail ?></a>
         </div>
       <?php endif; ?>
     </div>

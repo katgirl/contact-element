@@ -22,8 +22,8 @@
     "source": "https://github.com/nutshell-framework/contact-element"
   },
   "require": {
-    "php": ">=5.6",
-    "contao/core-bundle": "~4.1",
+    "php": ">=7.0",
+    "contao/core-bundle": "^4.4 || ^5.0",
     "symfony/http-kernel": "^3.3 || ^4.0"
   },
   "require-dev": {

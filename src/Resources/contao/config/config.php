@@ -16,7 +16,7 @@ use Nutshell\ContactElement\Content\Contact;
 /*
  * EuF Hero ContentElement
  */
-Contao\ArrayUtil::arrayInsert((
+Contao\ArrayUtil::arrayInsert(
     $GLOBALS['TL_CTE']['media'],
     4,
     [

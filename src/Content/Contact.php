@@ -55,7 +55,7 @@ class Contact extends ContentElement
                 ->get('contao.image.studio')
                 ->createFigureBuilder()
                 ->from($objModel->path)
-                ->setSize($this->heroSize)
+                ->setSize($this->size)
                 ->setMetadata($this->objModel->getOverwriteMetadata())
                 ->enableLightbox((bool) $this->fullsize)
                 ->buildIfResourceExists();

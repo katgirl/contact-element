@@ -17,6 +17,8 @@ use Contao\Config;
 use Contao\ContentElement;
 use Contao\FilesModel;
 use Contao\StringUtil;
+use Contao\Validator;
+use Contao\System;
 
 class Contact extends ContentElement
 {
@@ -32,14 +34,10 @@ class Contact extends ContentElement
      */
     protected function compile(): void
     {
-        // Clean the RTE output
-        $this->text = StringUtil::toHtml5($this->text);
 
         // Add the static files URL to images
-        if (TL_FILES_URL) {
-            $path = Config::get('uploadPath').'/';
-
-            $this->text = str_replace(' src="'.$path, ' src="'.TL_FILES_URL.$path, $this->text);
+        if ($staticUrl = System::getContainer()->get('contao.assets.files_context')->getStaticUrl()) {
+            $path = Config::get('uploadPath') . '/';
         }
 
         $this->Template->text = StringUtil::encodeEmail($this->text);
@@ -49,10 +47,23 @@ class Contact extends ContentElement
         if ($this->addContactImage && $this->singleSRC) {
             $objModel = FilesModel::findByUuid($this->singleSRC);
 
-            if (null !== $objModel && is_file(TL_ROOT.'/'.$objModel->path)) {
+            if ($objModel !== null && is_file(System::getContainer()->getParameter('kernel.project_dir') . '/' . $objModel->path)) {
                 $this->singleSRC = $objModel->path;
                 $this->overwriteMeta = ($this->alt || $this->imageTitle || $this->caption);
-                $this->addImageToTemplate($this->Template, $this->arrData, null, null, $objModel);
+
+                $figure = System::getContainer()
+                ->get('contao.image.studio')
+                ->createFigureBuilder()
+                ->from($objModel->path)
+                ->setSize($this->heroSize)
+                ->setMetadata($this->objModel->getOverwriteMetadata())
+                ->enableLightbox((bool) $this->fullsize)
+                ->buildIfResourceExists();
+
+                if (null !== $figure)
+                {
+                    $figure->applyLegacyTemplateData($this->Template, $this->imagemargin, $this->floating);
+                }
             }
 
             $this->Template->addContactImage = true;

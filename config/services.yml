@@ -1,0 +1,7 @@
+services:
+  _defaults:
+    autoconfigure: true
+
+  Nutshell\ContactElement\Migration\EufContactMigration:
+    arguments: [ '@database_connection' ]
+    tags: [ 'contao.migration' ]
